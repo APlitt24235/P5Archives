@@ -5,7 +5,7 @@ class Item:
         self.effect = effect
 
 class Consumable(Item):
-    def __init__(self, name type, effect, quantity):
+    def __init__(self, name, type, effect, quantity):
         super().__init__(name, type, effect)
         self.quantity = quantity
 
@@ -25,7 +25,7 @@ class Consumable(Item):
         else:
             print(f"{self.name} is out of stock.")
 
-class Equppable(Item):
+class Equippable(Item):
     def __init__(self, name, type, effect, equipped):
         super().__init__(name, type, effect)
         self.equipped = equipped
@@ -113,7 +113,7 @@ class Player:
         else:
             print(f"{item.name} is not in your inventory.")
 
-    def equip_itemm(self, item):
+    def equip_item(self, item):
         if item in self.inventory:
             if isinstance(item, Equippable):
                 item.equip(self)
@@ -148,12 +148,18 @@ class Spell:
         self.cost = cost
         self.power = power
 
-#Initializing player, enemy, and personas
+#Initializing player, enemy, personas, and items
 player = Player("Joker", 1, 100, 50, 10, 8, 6, 7, 4)
 enemy = Enemy("Shadow", 1, 75, 8, 6, 5, 6, 3)
 
 arsene = Persona("Arsene", 1, 75, 20, 8, 10, 6, 7, 5, "Fool")
 zorro = Persona("Zorro", 2, 90, 30, 12, 8, 7, 9, 6, "Magician")
+
+potion = Consumable("Potion", "heal", 20, 3)
+ether = Consumable("Ether", "sp", 10, 3)
+
+sword = Equippable("Sword", "weapon", 5, False)
+armor = Equippable("Armor", "armor", 3, False)
 
 #Initializing spells
 fire = Spell("Fire", 10, 15)
@@ -164,7 +170,7 @@ print("Battle start!")
 while player.hp > 0 and enemy.hp > 0:
     #Player turn
     print("Player turn.")
-    player_choice = input("What would you like to do? (attack/cast spell/summon persona)")
+    player_choice = input("What would you like to do? (attack/cast spell/summon persona/use item/equip item)")
     if player_choice == "attack":
         player.attack(enemy)
     elif player_choice == "cast spell":
@@ -179,6 +185,19 @@ while player.hp > 0 and enemy.hp > 0:
             player.summon_persona(arsene)
         elif persona_choice == "zorro":
             player.summon_persona(zorro)
+    elif player_choice == "use item":
+        item_choice = input("Which item would you like to use? (potion/ether)")
+        if item_choice == "potion":
+            player.use_item(potion, player)
+        elif item_choice == "ether":
+            player.use_item(ether, player)
+    elif player_choice == "equip item":
+        item_choice = input("Which item would you like to equip? (sword/armor)")
+        if item_choice == "sword":
+            player.equip_item(sword)
+        elif item_choice == "armor":
+            player.equip_item(armor)
+
     #Enemy turn
     print("Enemy turn.")
     enemy.attack(player)
@@ -186,5 +205,8 @@ while player.hp > 0 and enemy.hp > 0:
 #Battle end
 if player.hp > 0:
     print("You have defeated the enemy.")
+    # Player obtains loot
+    player.pick_up_item(potion)
+    player.pick_up_item(ether)
 else:
     print("You have been defeated.")
