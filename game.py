@@ -148,9 +148,65 @@ class Spell:
         self.cost = cost
         self.power = power
 
-#Initializing player, enemy, personas, and items
+#Adding more functionality to the game
+class Map:
+    def __init__(self, name, enemies):
+        self.name = name
+        self.enemies = enemies
+
+    def enter(self):
+        print(f"You have entered {self.name}.")
+        while self.enemies:
+            enemy = self.enemies.pop(0)
+            print(f"You have encountered a {enemy.name}.")
+            while enemy.hp > 0 and player.hp > 0:
+                #Player turn
+                print("Player turn.")
+                player_choice = input("what would you like to do? (attack/cast spell/summon persona/use item/equip item)")
+                if player_choice == "attack":
+                    player.attack(enemy)
+                elif player_choice == "cast spell":
+                    spell_choice = input("Which spell would you like to cast? (fire/ice)")
+                    if spell_choice == "fire":
+                        player.cast_spell(fire, enemy)
+                    elif spell_choice == "ice":
+                        player.cast_spell(ice, enemy)
+                elif player_choice == "summon persona":
+                    persona_choice = input("Which persona would you like to summon? (arsene/zorro)")
+                    if persona_choice == "arsene":
+                        player.summon_persona(arsene)
+                    elif persona_choice == "zorro":
+                        player.summon_persona(zorro)
+                elif player_choice == "use item":
+                    item_choice = input("Which item would you like to use? (potion/ether)")
+                    if item_choice == "potion":
+                        player.use_item(potion, player)
+                    elif item_choice == "ether":
+                        player.use_item(ether, player)
+                elif player_choice == "equip item":
+                    item_choice = input("Which item would you like to equip? (sword/armor)")
+                    if item_choice == "sword":
+                        player.equip_item(sword)
+                    elif item_choice == "armor":
+                        player.equip_item(armor)
+                #Enemy turn
+                print("Enemy turn.")
+                enemy.attack(player)
+            #Battle end
+            if player.hp > 0:
+                print("You have defeated the enemy.")
+                #Player obtains loot
+                player.pick_up_item(potion)
+                player.pick_up_item(ether)
+                player.pick_up_item(sword)
+                player.pick_up_item(armor)
+            else:
+                print("You have been defeated.")
+                break
+        print(f"You have completed {self.name}.")
+
+#Initializing player, personas, and items
 player = Player("Joker", 1, 100, 50, 10, 8, 6, 7, 4)
-enemy = Enemy("Shadow", 1, 75, 8, 6, 5, 6, 3)
 
 arsene = Persona("Arsene", 1, 75, 20, 8, 10, 6, 7, 5, "Fool")
 zorro = Persona("Zorro", 2, 90, 30, 12, 8, 7, 9, 6, "Magician")
@@ -165,48 +221,11 @@ armor = Equippable("Armor", "armor", 3, False)
 fire = Spell("Fire", 10, 15)
 ice = Spell("Ice", 12, 18)
 
-#Battle start
-print("Battle start!")
-while player.hp > 0 and enemy.hp > 0:
-    #Player turn
-    print("Player turn.")
-    player_choice = input("What would you like to do? (attack/cast spell/summon persona/use item/equip item)")
-    if player_choice == "attack":
-        player.attack(enemy)
-    elif player_choice == "cast spell":
-        spell_choice = input("Which spell would you like to case? (fire/ice)")
-        if spell_choice == "fire":
-            player.cast_spell(fire, enemy)
-        elif spell_choice == "ice":
-            player.cast_spell(ice, enemy)
-    elif player_choice == "summon persona":
-        persona_choice = input("Which persona would you like to summon? (arsene/zorro)")
-        if persona_choice == "arsene":
-            player.summon_persona(arsene)
-        elif persona_choice == "zorro":
-            player.summon_persona(zorro)
-    elif player_choice == "use item":
-        item_choice = input("Which item would you like to use? (potion/ether)")
-        if item_choice == "potion":
-            player.use_item(potion, player)
-        elif item_choice == "ether":
-            player.use_item(ether, player)
-    elif player_choice == "equip item":
-        item_choice = input("Which item would you like to equip? (sword/armor)")
-        if item_choice == "sword":
-            player.equip_item(sword)
-        elif item_choice == "armor":
-            player.equip_item(armor)
+#Initializing map and enemies
+map1 = Map("Map 1", [Enemy("Shadow", 1, 75, 8, 6, 5, 6, 3), Enemy("Shadow", 2, 90, 10, 8, 6, 7, 4)])
 
-    #Enemy turn
-    print("Enemy turn.")
-    enemy.attack(player)
+#Starting the game
+map1.enter()
 
-#Battle end
-if player.hp > 0:
-    print("You have defeated the enemy.")
-    # Player obtains loot
-    player.pick_up_item(potion)
-    player.pick_up_item(ether)
-else:
-    print("You have been defeated.")
+#End game
+print("Game Over.")
