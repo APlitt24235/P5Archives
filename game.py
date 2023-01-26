@@ -76,6 +76,8 @@ class Player:
         self.level = level
         self.hp = hp
         self.sp = sp
+        self.max_hp = hp
+        self.max_sp = sp
         self.strength = strength
         self.magic = magic
         self.endurance = endurance
@@ -225,9 +227,15 @@ ice = Spell("Ice", 12, 18)
 map1 = Map("Map 1", [Enemy("Shadow", 1, 75, 8, 6, 5, 6, 3), Enemy("Shadow", 2, 90, 10, 8, 6, 7, 4)])
 map2 = Map("Map 2", [Enemy("Shadow", 3, 110, 12, 10, 8, 8, 5), Enemy("Shadow", 4, 120, 14, 12, 10, 9, 6)])
 
-#Starting the game
-map1.enter()
-map2.enter()
+#Adding a game loop
+while player.hp > 0:
+    #Display map options
+    print("Where would you like to go? (map1/map2)")
+    map_choice = input()
+    if map_choice == "map1":
+        map1.enter()
+    elif map_choice == "map2":
+        map2.enter()
 
-#End game
+#Game over
 print("Game Over.")
