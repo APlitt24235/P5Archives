@@ -84,7 +84,6 @@ class Player:
         self.agility = agility
         self.luck = luck
         self.persona = None
-        self.inventory = []
 
     def attack(self, enemy):
         if self.persona:
@@ -110,7 +109,7 @@ class Player:
             print("Not enough SP to summon this Persona.")
 
     def use_item(self, item, target):
-        if item in self.inventory:
+        if item in inventory:
             item.use(target)
         else:
             print(f"{item.name} is not in your inventory.")
@@ -125,7 +124,7 @@ class Player:
             print(f"{item.name} is not in your inventory.")
 
     def pick_up_item(self, item):
-        self.inventory.append(item)
+        inventory.append(item)
         print(f"{self.name} picked up {item.name}.")
 
 class Enemy:
@@ -227,15 +226,42 @@ ice = Spell("Ice", 12, 18)
 map1 = Map("Map 1", [Enemy("Shadow", 1, 75, 8, 6, 5, 6, 3), Enemy("Shadow", 2, 90, 10, 8, 6, 7, 4)])
 map2 = Map("Map 2", [Enemy("Shadow", 3, 110, 12, 10, 8, 8, 5), Enemy("Shadow", 4, 120, 14, 12, 10, 9, 6)])
 
+#Adding inventory
+inventory = []
+
 #Adding a game loop
 while player.hp > 0:
     #Display map options
-    print("Where would you like to go? (map1/map2)")
+    print("Where would you like to go? (map1/map2) OR would you like to check or use items? (inventory/use)")
     map_choice = input()
     if map_choice == "map1":
         map1.enter()
     elif map_choice == "map2":
         map2.enter()
+    #Add option to check inventory
+    elif map_choice == "inventory":
+        if len(inventory) == 0:
+            print("Inventory is empty.")
+        else:
+            for item in inventory:
+                print(item.name)
+    #Add option to use item
+    elif map_choice == "use":
+        item_choice = input("Which item would you like to use? ")
+        for item in inventory:
+            if item.name.lower() == item_choice.lower():
+                if item.name == "Potion":
+                    player.hp += item.effect
+                    print("You have used a potion and regained " + str(item.effect) + " hp.")
+                    inventory.remove(item)
+                    break
+                elif item.name == "Ether":
+                    player.mp += item.effect
+                    print("You have used an ether and regained " + str(item.effect) + " sp.")
+                    inventory.remove(item)
+                    break
+                else:
+                    print("Invalid item.")
 
 #Game over
 print("Game Over.")
