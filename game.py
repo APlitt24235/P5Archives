@@ -43,7 +43,7 @@ class Equippable(Item):
                 print(f"{target.name} equipped {self.name} and increased endurance by {self.effect}.")
 
 class Persona:
-    def __init__(self, name, level, hp, sp, strength, magic, endurance, agility, luck, arcana):
+    def __init__(self, name, level, hp, sp, strength, magic, endurance, agility, luck, arcana, specialAbility):
         self.name = name
         self.level = level
         self.hp = hp
@@ -54,6 +54,7 @@ class Persona:
         self.agility = agility
         self.luck = luck
         self.arcana = arcana
+        self.specialAbility = specialAbility
 
     def attack(self, enemy):
         damage = self.strength - enemy.endurance
@@ -69,6 +70,12 @@ class Persona:
     def summon(self, player):
         player.persona = self
         print(f"{player.name} has summoned {self.name}")
+
+    def useSpecialAbility(self, specialAbility, enemy):
+        damage = specialAbility[0] + self.magic - enemy.endurance
+        enemy.hp -= damage
+        self.sp -= specialAbility[1]
+        print(f"{self.name} cast {specialAbility[2]} and dealt {damage} damage to {enemy.name}")
 
 class Player:
     def __init__(self, name, level, hp, sp, strength, magic, endurance, agility, luck):
@@ -127,6 +134,12 @@ class Player:
         inventory.append(item)
         print(f"{self.name} picked up {item.name}.")
 
+    def useSpecialAbility(self, enemy):
+        if self.persona:
+            self.persona.useSpecialAbility(self.persona.specialAbility, enemy)
+        else:
+            print("You do not have a persona active to use an ability.")
+
 class Enemy:
     def __init__(self, name, level, hp, strength, magic, endurance, agility, luck):
         self.name = name
@@ -163,7 +176,7 @@ class Map:
             while enemy.hp > 0 and player.hp > 0:
                 #Player turn
                 print("Player turn.")
-                player_choice = input("what would you like to do? (attack/cast spell/summon persona/use item/equip item)")
+                player_choice = input("what would you like to do? (attack/cast spell/summon persona/use item/equip item/use ability)")
                 if player_choice == "attack":
                     player.attack(enemy)
                 elif player_choice == "cast spell":
@@ -194,6 +207,16 @@ class Map:
                         player.equip_item(sword)
                     elif item_choice == "armor":
                         player.equip_item(armor)
+                #Add option to use persona ability in battle
+                elif player_choice == "use ability":
+                    if player.persona == arsene:
+                        player.useSpecialAbility(enemy)
+                    elif player.persona == zorro:
+                        player.useSpecialAbility(enemy)
+                    elif player.persona == orpheus:
+                        player.useSpecialAbility(enemy)
+                    elif player.persona == surt:
+                        player.useSpecialAbility(enemy)
                 #Enemy turn
                 print("Enemy turn.")
                 enemy.attack(player)
@@ -213,10 +236,10 @@ class Map:
 #Initializing player, personas, and items
 player = Player("Joker", 1, 100, 50, 10, 8, 6, 7, 4)
 
-arsene = Persona("Arsene", 1, 75, 20, 8, 10, 6, 7, 5, "Fool")
-zorro = Persona("Zorro", 2, 90, 30, 12, 8, 7, 9, 6, "Magician")
-orpheus = Persona("Orpheus", 26, 442, 442, 17, 17, 17, 17, 17, "Fool")
-surt = Persona("Surt", 59, 2301, 2360, 37, 40, 39, 35, 33, "Magician")
+arsene = Persona("Arsene", 1, 75, 20, 8, 10, 6, 7, 5, "Fool", [50, 4, "Eiha"])
+zorro = Persona("Zorro", 2, 90, 30, 12, 8, 7, 9, 6, "Magician", [40, 3, "Garu"])
+orpheus = Persona("Orpheus", 26, 442, 442, 17, 17, 17, 17, 17, "Fool", [100, 8, "Agilao"])
+surt = Persona("Surt", 59, 2301, 2360, 37, 40, 39, 35, 33, "Magician", [160, 12, "Agidyne"])
 
 potion = Consumable("Potion", "heal", 20, 3)
 ether = Consumable("Ether", "sp", 10, 3)
