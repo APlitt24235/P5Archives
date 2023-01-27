@@ -173,11 +173,15 @@ class Map:
                     elif spell_choice == "ice":
                         player.cast_spell(ice, enemy)
                 elif player_choice == "summon persona":
-                    persona_choice = input("Which persona would you like to summon? (arsene/zorro)")
+                    persona_choice = input("Which persona would you like to summon? (arsene/zorro/orpheus/surt)")
                     if persona_choice == "arsene":
                         player.summon_persona(arsene)
                     elif persona_choice == "zorro":
                         player.summon_persona(zorro)
+                    elif persona_choice == "orpheus":
+                        player.summon_persona(orpheus)
+                    elif persona_choice == "surt":
+                        player.summon_persona(surt)
                 elif player_choice == "use item":
                     item_choice = input("Which item would you like to use? (potion/ether)")
                     if item_choice == "potion":
@@ -211,6 +215,8 @@ player = Player("Joker", 1, 100, 50, 10, 8, 6, 7, 4)
 
 arsene = Persona("Arsene", 1, 75, 20, 8, 10, 6, 7, 5, "Fool")
 zorro = Persona("Zorro", 2, 90, 30, 12, 8, 7, 9, 6, "Magician")
+orpheus = Persona("Orpheus", 26, 442, 442, 17, 17, 17, 17, 17, "Fool")
+surt = Persona("Surt", 59, 2301, 2360, 37, 40, 39, 35, 33, "Magician")
 
 potion = Consumable("Potion", "heal", 20, 3)
 ether = Consumable("Ether", "sp", 10, 3)
@@ -232,7 +238,7 @@ inventory = []
 #Adding a game loop
 while player.hp > 0:
     #Display map options
-    print("Where would you like to go? (map1/map2) OR would you like to check or use items? (inventory/use)")
+    print("Where would you like to go? (map1/map2/inventory/use/persona)")
     map_choice = input()
     if map_choice == "map1":
         map1.enter()
@@ -262,6 +268,24 @@ while player.hp > 0:
                     break
                 else:
                     print("Invalid item.")
+    #Add option to switch persona
+    elif map_choice == "persona":
+        persona_choice = input("Which persona would you like to switch to?(arsene/zorro/orpheus/surt) ")
+        if persona_choice.lower() == "arsene":
+            player.summon_persona(arsene)
+            print("You have switched to " + arsene.name + ".")
+        elif persona_choice.lower() == "zorro":
+            player.summon_persona(zorro)
+            print("You have switched to " + zorro.name + ".")
+        elif persona_choice.lower() == "orpheus":
+            player.summon_persona(orpheus)
+            print("You have switched to " + orpheus.name + ".")
+        elif persona_choice.lower() == "surt":
+            player.summon_persona(surt)
+            print("You have switched to " + surt.name + ".")
+        else:
+            print("Invalid persona.")
+        
 
 #Game over
 print("Game Over.")
