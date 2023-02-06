@@ -309,6 +309,5 @@ while player.hp > 0:
         else:
             print("Invalid persona.")
         
-
 #Game over
 print("Game Over.")

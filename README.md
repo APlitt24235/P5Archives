@@ -1,6 +1,8 @@
 # P5Archives
-A place where any of my P5 related code projects will go.
+A place where any of my code projects will go.
 
-Currently working on: P5 RPG using Python;
+Currently working on: Danganronpa-style Visual Novel;
 
 Finished Projects: None;
+
+Projects on Hiatus: Persona 5 RPG using Python;
